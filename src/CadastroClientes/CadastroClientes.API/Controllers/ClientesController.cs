@@ -1,15 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CadastroClientes.Application.DTOs;
+using CadastroClientes.Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CadastroClientes.API.Controllers
 {
     public class ClientesController : Controller
     {
-        [HttpPost("/[controller]")]
-        public IActionResult Cadastrar()
+        private readonly IClienteService _clienteService;
+
+        public ClientesController(IClienteService clienteService)
         {
-            return Ok();
+            _clienteService = clienteService;
         }
-        
+
+        [HttpPost("/[controller]")]
+        public async Task<IActionResult> Cadastrar([FromBody] ClienteDto clienteDto)
+        {
+            var idCliente = await _clienteService.CriarClienteAsync(clienteDto);
+            return CreatedAtAction(nameof(Obter), new { idCliente }, clienteDto);
+        }
+
         [HttpGet("/[controller]")]
         public IActionResult Obter(Guid idCliente)
         {
