@@ -1,12 +1,19 @@
+using CadastroClientes.Application.Interfaces;
+using CadastroClientes.Application.Services;
+using CadastroClientes.Domain.Interfaces;
 using CadastroClientes.Infra.Data;
+using CadastroClientes.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Adicionando SQLite como provedor de banco de dados
-var dbPath = Path.Combine(AppContext.BaseDirectory, "Data", "clientes.db");
+var dbPath = Path.GetFullPath(Path.Combine("..", "clientes.db"));
 builder.Services.AddDbContext<CadastroClientesDbContext>(options => options.UseSqlite($"Data Source={dbPath}"));
+
+// Registrando os repositórios e serviços
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
 
 builder.Services.AddControllers();
 
