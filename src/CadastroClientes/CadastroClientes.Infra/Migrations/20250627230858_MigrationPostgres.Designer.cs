@@ -3,6 +3,7 @@ using System;
 using CadastroClientes.Infra.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CadastroClientes.Infra.Migrations
 {
     [DbContext(typeof(CadastroClientesDbContext))]
-    partial class CadastroClientesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250627230858_MigrationPostgres")]
+    partial class MigrationPostgres
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
