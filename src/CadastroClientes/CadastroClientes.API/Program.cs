@@ -7,13 +7,18 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Adicionando SQLite como provedor de banco de dados
-var connectionString = builder.Configuration.GetConnectionString("PostgresConnection")
-                       ?? Environment.GetEnvironmentVariable("ConnectionStrings__PostgresConnection");
+var config = builder.Configuration;
+var useSqlite = config.GetValue<bool>("UseSqlite");
 
-
-builder.Services.AddDbContext<CadastroClientesDbContext>(options => options.UseNpgsql(connectionString));
-
+builder.Services.AddDbContext<CadastroClientesDbContext>(options =>
+{
+    if (useSqlite)
+        options.UseSqlite(config.GetConnectionString("SQLite"));
+    else
+    {
+        options.UseNpgsql(config.GetConnectionString("Postgres") ?? Environment.GetEnvironmentVariable("ConnectionStrings__PostgresConnection"));
+    }
+});
 
 // Registrando os repositórios e serviços
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
@@ -29,7 +34,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<CadastroClientesDbContext>();
-    db.Database.Migrate();
+    await db.Database.MigrateAsync();
 }
 
 // Configure the HTTP request pipeline.
@@ -45,4 +50,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

@@ -3,6 +3,7 @@ using System;
 using CadastroClientes.Infra.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CadastroClientes.Infra.Migrations
 {
     [DbContext(typeof(CadastroClientesDbContext))]
-    partial class CadastroClientesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250627122324_MigrationSQLite")]
+    partial class MigrationSQLite
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");

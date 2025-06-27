@@ -2,7 +2,6 @@
 using CadastroClientes.Application.Interfaces;
 using CadastroClientes.Domain.Entidades;
 using CadastroClientes.Domain.Interfaces;
-using System.Data;
 
 namespace CadastroClientes.Application.Services
 {
@@ -15,17 +14,15 @@ namespace CadastroClientes.Application.Services
             _clienteRepository = clienteRepository;
         }
 
-        public async Task<Guid> CriarAsync(ClienteDto clienteDto)
+        public async Task<Guid> CriarAsync(ClienteDto dto)
         {
-            Cliente cliente = new(
-                clienteDto.Nome,
-                clienteDto.Cpf,
-                clienteDto.DataNascimento,
-                clienteDto.Email,
-                clienteDto.Telefone
-            );
+            //TODO: Validar entrada
 
-            var a = await _clienteRepository.AdicionarCliente(cliente);
+            Cliente cliente = new(dto.Nome,dto.Cpf,dto.DataNascimento,dto.Email,dto.Telefone);
+
+            Cliente? a = await _clienteRepository.AdicionarCliente(cliente);
+
+            //TODO: Mensagem em caso de sucesso
 
             return a.Id;
         }
