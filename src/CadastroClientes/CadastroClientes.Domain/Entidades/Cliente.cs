@@ -19,7 +19,7 @@ namespace CadastroClientes.Domain.Entidades
         {
             Nome = nome;
             Cpf = cpf;
-            DataNascimento = dataNascimento;
+            DataNascimento = dataNascimento.ToUniversalTime();
             Email = email;
             Telefone = telefone;
         }

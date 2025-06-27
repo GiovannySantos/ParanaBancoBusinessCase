@@ -2,6 +2,7 @@
 using CadastroClientes.Application.Interfaces;
 using CadastroClientes.Domain.Entidades;
 using CadastroClientes.Domain.Interfaces;
+using System.Data;
 
 namespace CadastroClientes.Application.Services
 {

@@ -17,7 +17,7 @@ namespace CadastroClientes.API.Controllers
         public async Task<IActionResult> Cadastrar([FromBody] ClienteDto clienteDto)
         {
             var idCliente = await _clienteService.CriarAsync(clienteDto);
-            return CreatedAtAction(nameof(Obter), new { idCliente }, clienteDto);
+            return CreatedAtAction(nameof(Cadastrar), clienteDto);
         }
 
         [HttpGet("/[controller]")]

@@ -1,17 +1,21 @@
-using CadastroClientes.Application.Interfaces;
+ï»¿using CadastroClientes.Application.Interfaces;
 using CadastroClientes.Application.Services;
 using CadastroClientes.Domain.Interfaces;
-using CadastroClientes.Infra.Data;
+using CadastroClientes.Infra.DbContexts;
 using CadastroClientes.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Adicionando SQLite como provedor de banco de dados
-var dbPath = Path.GetFullPath(Path.Combine("..", "clientes.db"));
-builder.Services.AddDbContext<CadastroClientesDbContext>(options => options.UseSqlite($"Data Source={dbPath}"));
+var connectionString = builder.Configuration.GetConnectionString("PostgresConnection")
+                       ?? Environment.GetEnvironmentVariable("ConnectionStrings__PostgresConnection");
 
-// Registrando os repositórios e serviços
+
+builder.Services.AddDbContext<CadastroClientesDbContext>(options => options.UseNpgsql(connectionString));
+
+
+// Registrando os repositÃ³rios e serviÃ§os
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 
@@ -21,6 +25,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<CadastroClientesDbContext>();
+    db.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

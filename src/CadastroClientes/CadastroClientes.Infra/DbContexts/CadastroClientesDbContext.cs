@@ -1,7 +1,7 @@
 ﻿using CadastroClientes.Domain.Entidades;
 using Microsoft.EntityFrameworkCore;
 
-namespace CadastroClientes.Infra.Data
+namespace CadastroClientes.Infra.DbContexts
 {
     public class CadastroClientesDbContext : DbContext
     {
