@@ -1,10 +1,11 @@
 ﻿using CadastroClientes.Application.DTOs;
 using CadastroClientes.Application.Interfaces;
+using CadastroClientes.Application.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CadastroClientes.API.Controllers
 {
-    public class ClientesController : Controller
+    public class ClientesController : ControllerBase
     {
         private readonly IClienteService _clienteService;
 
@@ -16,14 +17,21 @@ namespace CadastroClientes.API.Controllers
         [HttpPost("/[controller]")]
         public async Task<IActionResult> Cadastrar([FromBody] ClienteDto clienteDto)
         {
-            await _clienteService.CriarAsync(clienteDto);
-            return CreatedAtAction(nameof(Cadastrar), clienteDto);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            ClientesResult cadastro = await _clienteService.CadastrarAsync(clienteDto);
+            return CreatedAtAction(nameof(Cadastrar), cadastro);
         }
 
         [HttpGet("/[controller]")]
-        public IActionResult Obter(Guid idCliente)
+        public async Task<IActionResult> Obter([FromQuery] string cpf)
         {
-            return Ok();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            ClientesResult cliente = await _clienteService.ObterAsync(cpf);
+            return Ok(cliente);
         }
     }
 }

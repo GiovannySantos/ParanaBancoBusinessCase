@@ -4,6 +4,8 @@ namespace CadastroClientes.Domain.Interfaces
 {
     public interface IClienteRepository
     {
-        Task<Cliente> AdicionarCliente(Cliente cliente);
+        Task<Cliente> CadastrarAsync(Cliente cliente);
+        bool ExistePorCpf(string cpf);
+        Task<Cliente> ObterPorCpf(string cpf);
     }
 }
