@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CadastroClientes.Applicatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CadastroClientes.Infra", "CadastroClientes\CadastroClientes.Infra\CadastroClientes.Infra.csproj", "{10F8FE0A-3075-40DB-8FFF-91AF2D830105}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PropostaCredito", "PropostaCredito", "{9BE5D901-7174-462A-9643-592B95808522}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CartaoCredito", "CartaoCredito", "{14F5DF08-0F8A-4E30-BCF7-6D886EF646BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
