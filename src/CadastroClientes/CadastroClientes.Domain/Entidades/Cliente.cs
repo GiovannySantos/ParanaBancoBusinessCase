@@ -1,32 +1,33 @@
-﻿using CadastroClientes.Domain.Entidades.Enums;
-
-namespace CadastroClientes.Domain.Entidades
+﻿namespace CadastroClientes.Domain.Entidades
 {
     public class Cliente
     {
         public Guid Id { get; private set; } = Guid.NewGuid();
+     
+        //Dados pessoais
         public string Nome { get; private set; }
         public string Cpf { get; private set; }
         public DateTime DataNascimento { get; private set; }
         public string Email { get; private set; }
         public string Telefone { get; private set; }
-        public StatusCliente Status { get; private set; } = StatusCliente.Ativo;
+
+        //Dados financeiros do cliente
+        public decimal RendaMensal { get; set; }
+        public decimal ValorCreditoDesejado { get; set; }
+
         public DateTime DataCriacao { get; private set; } = DateTime.UtcNow;
 
         protected Cliente() { } // EF Core
 
-        public Cliente(string nome, string cpf, DateTime dataNascimento, string email, string telefone)
+        public Cliente(string nome, string cpf, DateTime dataNascimento, string email, string telefone, decimal rendaMensal, decimal valorCreditoDesejado)
         {
             Nome = nome;
             Cpf = cpf;
-            DataNascimento = dataNascimento.ToUniversalTime();
+            DataNascimento = dataNascimento.Date;
             Email = email;
             Telefone = telefone;
-        }
-
-        public void MarcarComoComErro()
-        {
-            Status = StatusCliente.Erro;
+            RendaMensal = rendaMensal;
+            ValorCreditoDesejado = valorCreditoDesejado;
         }
     }
 }

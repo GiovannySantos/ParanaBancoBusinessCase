@@ -25,8 +25,8 @@ namespace CadastroClientes.Infra.Messaging
         {
             try
             {
-                using var connection = await _factory.CreateConnectionAsync();
-                using var channel = await connection.CreateChannelAsync();
+                using IConnection connection = await _factory.CreateConnectionAsync();
+                using IChannel channel = await connection.CreateChannelAsync();
 
                 var message = JsonConvert.SerializeObject(evento);
                 var body = Encoding.UTF8.GetBytes(message);
@@ -39,12 +39,7 @@ namespace CadastroClientes.Infra.Messaging
                     CorrelationId = Guid.NewGuid().ToString()
                 };
 
-                await channel.BasicPublishAsync(
-                    publishProperties.Exchange, 
-                    publishProperties.RoutingKey, 
-                    publishProperties.Mandatory, 
-                    properties, 
-                    body);
+                await channel.BasicPublishAsync(publishProperties.Exchange, publishProperties.RoutingKey, publishProperties.Mandatory, properties, body);
             }
             catch (BrokerUnreachableException)
             {

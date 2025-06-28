@@ -1,22 +1,14 @@
 ﻿namespace CadastroClientes.Domain.Events
 {
-    public class ClienteCadastradoEvent
+    public class ClienteCadastradoEvent(Guid clienteId, string nome, string cpf, DateTime dataNascimento, string email, string telefone, decimal rendaMensal, decimal valorCreditoDesejado)
     {
-        public Guid ClienteId { get; }
-        public string Nome { get; }
-        public string Cpf { get; }
-        public DateTime DataNascimento { get; }
-        public string Email { get; }
-        public string Telefone { get; }
-
-        public ClienteCadastradoEvent(Guid clienteId, string nome, string cpf, DateTime dataNascimento, string email, string telefone)
-        {
-            ClienteId = clienteId;
-            Nome = nome;
-            Cpf = cpf;
-            DataNascimento = dataNascimento;
-            Email = email;
-            Telefone = telefone;
-        }
+        public Guid ClienteId { get; } = clienteId;
+        public string Nome { get; } = nome;
+        public string Cpf { get; } = cpf;
+        public DateTime DataNascimento { get; } = dataNascimento;
+        public string Email { get; } = email;
+        public string Telefone { get; } = telefone;
+        public decimal RendaMensal { get; } = rendaMensal;
+        public decimal ValorCreditoDesejado { get; } = valorCreditoDesejado;
     }
 }

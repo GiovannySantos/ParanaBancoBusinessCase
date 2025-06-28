@@ -29,11 +29,13 @@ namespace CadastroClientes.Infra.Configuration
             builder.Property(c => c.Telefone)
                 .HasMaxLength(15);
 
-            builder.Property(c => c.Status)
-                .IsRequired()
-                .HasConversion<string>();
-
             builder.Property(c => c.DataCriacao)
+                .IsRequired();
+
+            builder.Property(c => c.RendaMensal)
+                .IsRequired();
+
+            builder.Property(c => c.ValorCreditoDesejado)
                 .IsRequired();
         }
     }

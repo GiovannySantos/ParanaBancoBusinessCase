@@ -18,5 +18,11 @@ namespace CadastroClientes.Application.DTOs
         public string Email { get; set; } = string.Empty;
 
         public string Telefone { get; set; } = string.Empty;
+
+        [Required]
+        public decimal RendaMensal { get; set; }
+
+        public decimal ValorCreditoDesejado { get; set; }
+
     }
 }
