@@ -2,6 +2,7 @@
 using CadastroClientes.Application.Services;
 using CadastroClientes.Domain.Interfaces;
 using CadastroClientes.Infra.DbContexts;
+using CadastroClientes.Infra.Messaging;
 using CadastroClientes.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,9 @@ public static class ServiceCollectionExtensions
                 options.UseNpgsql(config.GetConnectionString("Postgres") ??
                     Environment.GetEnvironmentVariable("ConnectionStrings__PostgresConnection"));
         });
+
+        // Messaging Layer
+        builder.Services.AddSingleton<IEventPublisher, RabbitMQPublisher>(provider => new RabbitMQPublisher("rabbitmq"));
 
         // Application Layer
         services.AddScoped<IClienteService, ClienteService>();

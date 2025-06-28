@@ -9,10 +9,12 @@ namespace CadastroClientes.Application.Services
     public class ClienteService : IClienteService
     {
         private readonly IClienteRepository _clienteRepository;
+        private readonly IEventPublisher _publisher;
 
-        public ClienteService(IClienteRepository clienteRepository)
+        public ClienteService(IClienteRepository clienteRepository, IEventPublisher eventPublisher)
         {
             _clienteRepository = clienteRepository;
+            _publisher = eventPublisher;
         }
 
         public async Task<ClientesResult> CadastrarAsync(ClienteDto clienteDto)
@@ -21,12 +23,21 @@ namespace CadastroClientes.Application.Services
             if (existe)
                 return new(false, "Erro ao cadastrar - Já existe um cliente cadastrado com esse CPF");
 
-            Cliente cliente = new(clienteDto.Nome,clienteDto.Cpf,clienteDto.DataNascimento,clienteDto.Email,clienteDto.Telefone);
+            Cliente? cliente = await _clienteRepository.CadastrarAsync(new(clienteDto.Nome, clienteDto.Cpf, clienteDto.DataNascimento, clienteDto.Email, clienteDto.Telefone));
 
-            Cliente? a = await _clienteRepository.CadastrarAsync(cliente);
+            if (cliente == null)
+                return new(false, "Erro ao cadastrar - Cliente não pôde ser cadastrado");
 
-            //TODO: Mensagem em caso de sucesso
-            return new(sucesso: true, new { a.Nome, a.Email });
+            await _publisher.PublishClienteCadastrado(new(
+                 clienteId: cliente.Id,
+                 nome: cliente.Nome,
+                 cpf: cliente.Cpf,
+                 dataNascimento: cliente.DataNascimento,
+                 email: cliente.Email,
+                 telefone: cliente.Telefone
+            ));
+
+            return new(sucesso: true, new { cliente.Nome, cliente.Email });
         }
 
         public async Task<ClientesResult> ObterAsync(string cpf)
@@ -36,7 +47,7 @@ namespace CadastroClientes.Application.Services
                 return new(false, "Erro ao buscar - Cliente não encontrado");
             var cliente = await _clienteRepository.ObterPorCpf(cpf);
 
-            return new(true, new { cliente.Nome, cliente.Email } );
+            return new(true, new { cliente.Nome, cliente.Email });
         }
     }
 }
