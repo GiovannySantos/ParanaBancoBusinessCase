@@ -1,4 +1,5 @@
 ﻿using CadastroClientes.Infra.DbContexts;
+using CadastroClientes.Infra.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Polly;
@@ -36,5 +37,13 @@ public static class ApplicationBuilderExtensions
             var db = scope.ServiceProvider.GetRequiredService<CadastroClientesDbContext>();
             db.Database.Migrate();
         });
+    }
+
+    public static async Task InitializeMessagingAsync(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        
+        var initializer = scope.ServiceProvider.GetRequiredService<RabbitMQInitializer>();
+        await initializer.InitializeAsync();
     }
 }

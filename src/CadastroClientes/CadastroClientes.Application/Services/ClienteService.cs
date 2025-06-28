@@ -3,6 +3,7 @@ using CadastroClientes.Application.Interfaces;
 using CadastroClientes.Application.Results;
 using CadastroClientes.Domain.Entidades;
 using CadastroClientes.Domain.Interfaces;
+using CadastroClientes.Domain.Events;
 
 namespace CadastroClientes.Application.Services
 {
@@ -28,14 +29,9 @@ namespace CadastroClientes.Application.Services
             if (cliente == null)
                 return new(false, "Erro ao cadastrar - Cliente não pôde ser cadastrado");
 
-            await _publisher.PublishClienteCadastrado(new(
-                 clienteId: cliente.Id,
-                 nome: cliente.Nome,
-                 cpf: cliente.Cpf,
-                 dataNascimento: cliente.DataNascimento,
-                 email: cliente.Email,
-                 telefone: cliente.Telefone
-            ));
+            // Publica o evento de cliente cadastrado
+            var cadastroClienteEvent = new ClienteCadastradoEvent(cliente.Id,cliente.Nome,cliente.Cpf,cliente.DataNascimento,cliente.Email,cliente.Telefone);
+            await _publisher.PublishAsync(cadastroClienteEvent, new("cliente.cadastrado.exchange", "direct","cliente.cadastrado"));
 
             return new(sucesso: true, new { cliente.Nome, cliente.Email });
         }

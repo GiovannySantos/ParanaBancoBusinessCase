@@ -8,5 +8,6 @@ var app = builder.Build();
 
 app.MigrateDatabaseWithRetry();
 app.ConfigurePipeline();
+await app.InitializeMessagingAsync();
 
 await app.RunAsync();

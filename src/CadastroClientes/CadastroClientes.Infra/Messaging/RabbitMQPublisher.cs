@@ -1,48 +1,60 @@
 ﻿using CadastroClientes.Application.Interfaces;
+using CadastroClientes.Application.Messaging;
+using CadastroClientes.Infra.Settings;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Exceptions;
+using System.Text;
 
 namespace CadastroClientes.Infra.Messaging
 {
     public class RabbitMQPublisher : IEventPublisher
     {
         private readonly ConnectionFactory _factory;
-        private readonly string _exchangeName = "cadastroClientesExchange";
 
-        public RabbitMQPublisher(string hostName)
+        public RabbitMQPublisher(IOptions<RabbitMQSettings> options)
         {
             _factory = new ConnectionFactory
             {
-                HostName = hostName
+                HostName = options.Value.HostName,
             };
         }
 
-        public async Task PublishClienteCadastrado(ClienteCadastradoEvent clienteCadastradoEvent)
+        public async Task PublishAsync<T>(T evento, PublishProperties publishProperties)
         {
-            using var connection = await _factory.CreateConnectionAsync();
-            using var channel = await connection.CreateChannelAsync();
-
-            await channel.ExchangeDeclareAsync(_exchangeName, ExchangeType.Direct, durable: true);
-
-            var routingKey = "cliente.cadastrado";
-            var message = JsonConvert.SerializeObject(clienteCadastradoEvent);
-            var body = System.Text.Encoding.UTF8.GetBytes(message);
-
-            var properties = new BasicProperties()
+            try
             {
-                ContentType = "application/json",
-                DeliveryMode = DeliveryModes.Persistent,
-            };
+                using var connection = await _factory.CreateConnectionAsync();
+                using var channel = await connection.CreateChannelAsync();
 
-            await channel.BasicPublishAsync(
-                exchange: _exchangeName,
-                routingKey: routingKey,
-                mandatory: true,
-                basicProperties: properties,
-                body: body
-            );
+                var message = JsonConvert.SerializeObject(evento);
+                var body = Encoding.UTF8.GetBytes(message);
 
-            Console.WriteLine($"Mensagem publicada no RabbitMQ: {JsonConvert.SerializeObject(message)}");
+                var properties = new BasicProperties
+                {
+                    ContentType = "application/json",
+                    DeliveryMode = DeliveryModes.Persistent,
+                    MessageId = Guid.NewGuid().ToString(),
+                    CorrelationId = Guid.NewGuid().ToString()
+                };
+
+                await channel.BasicPublishAsync(
+                    publishProperties.Exchange, 
+                    publishProperties.RoutingKey, 
+                    publishProperties.Mandatory, 
+                    properties, 
+                    body);
+            }
+            catch (BrokerUnreachableException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
+

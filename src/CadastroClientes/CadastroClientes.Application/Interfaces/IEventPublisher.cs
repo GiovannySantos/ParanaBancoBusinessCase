@@ -1,7 +1,9 @@
-﻿namespace CadastroClientes.Application.Interfaces
+﻿using CadastroClientes.Application.Messaging;
+
+namespace CadastroClientes.Application.Interfaces
 {
     public interface IEventPublisher
     {
-        Task PublishClienteCadastrado(ClienteCadastradoEvent clienteCadastradoEvent);
+        Task PublishAsync<T>(T evento, PublishProperties publishProperties);
     }
 }
