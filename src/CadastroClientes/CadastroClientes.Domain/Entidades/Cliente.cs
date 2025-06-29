@@ -23,7 +23,7 @@
         {
             Nome = nome;
             Cpf = cpf;
-            DataNascimento = dataNascimento.Date;
+            DataNascimento = dataNascimento.Date.ToUniversalTime();
             Email = email;
             Telefone = telefone;
             RendaMensal = rendaMensal;
