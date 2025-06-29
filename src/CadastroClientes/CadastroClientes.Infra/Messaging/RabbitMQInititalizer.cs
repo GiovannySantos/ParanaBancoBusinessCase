@@ -39,7 +39,7 @@ namespace CadastroClientes.Infra.Messaging
                 await channel.ExchangeDeclareAsync(exchange: "cadastro.clientes.events", ExchangeType.Direct, durable: true, autoDelete: false);
             });
 
-            
+
         }
     }
 }
