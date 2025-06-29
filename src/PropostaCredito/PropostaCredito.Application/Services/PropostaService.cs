@@ -19,7 +19,7 @@ namespace PropostaCredito.Application.Services
             if (validacoes != null && validacoes.Count > 0)
                 return new(false, validacoes);
 
-            var proposta = await _propostaRepository.CadastrarAsync(new(propostaDto.ClienteId, propostaDto.ValorSolicitado, propostaDto.RendaMensal));
+            Proposta? proposta = await _propostaRepository.CadastrarAsync(new(propostaDto.ClienteId, propostaDto.ValorSolicitado, propostaDto.RendaMensal));
 
             //Notificar os serviços que a proposta foi criada (aprovada ou não)
             if (proposta.Aprovada)
@@ -64,9 +64,22 @@ namespace PropostaCredito.Application.Services
             throw new NotImplementedException();
         }
 
-        private List<PropostaResult> ValidarPropostaDto(PropostaDto propostaDto)
+        //Valida somente o básico, as validações de negócio estão na entidade Proposta
+        private static List<string>? ValidarPropostaDto(PropostaDto propostaDto)
         {
-            return [];
+            var erros = new List<string>();
+            if (propostaDto.RendaMensal <= 0)
+                erros.Add("Renda mensal deve ser maior que zero.");
+
+
+            if (propostaDto.ValorSolicitado <= 0)
+                erros.Add("Valor solicitado deve ser maior que zero.");
+
+
+            if (propostaDto.ClienteId == Guid.Empty)
+                erros.Add("ClienteId é obrigatório.");
+
+            return erros.Count > 0 ? erros : null;
         }
     }
 }

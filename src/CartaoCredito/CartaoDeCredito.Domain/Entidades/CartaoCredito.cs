@@ -15,12 +15,15 @@
 
         private CartaoCredito() { }
 
+        //Serve apenas para gerar os dados de uma forma randomica
+        private static readonly Random _random = new();
+
         public CartaoCredito(Guid propostaId, Guid clienteId, string nomeImpresso, decimal limite)
         {
             Id = Guid.NewGuid();
             PropostaId = propostaId;
             ClienteId = clienteId;
-            NomeImpresso = nomeImpresso;
+            NomeImpresso = nomeImpresso.ToUpperInvariant();
             Limite = limite;
             DataCriacao = DateTime.UtcNow;
 
@@ -31,14 +34,12 @@
 
         private static string GerarNumero()
         {
-            var random = new Random();
-            return $"{random.Next(4000, 4999)} {random.Next(1000, 9999)} {random.Next(1000, 9999)} {random.Next(1000, 9999)}";
+            return $"{_random.Next(4000, 4999)} {_random.Next(1000, 9999)} {_random.Next(1000, 9999)} {_random.Next(1000, 9999)}";
         }
 
         private static string GerarCvv()
         {
-            var random = new Random();
-            return random.Next(100, 999).ToString();
+            return _random.Next(100, 999).ToString();
         }
 
         private static DateTime CalcularValidade()

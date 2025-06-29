@@ -24,18 +24,26 @@
             Avaliar();
         }
 
-        private bool Avaliar()
+        private void Avaliar()
         {
             // Lógica de avaliação da proposta
-            // Exemplo: se o valor solicitado for maior que 3 vezes a renda mensal, rejeita
+            //Se o valor solicitado for maior que 3 vezes a renda mensal, rejeita
             if (ValorSolicitado > RendaMensal * 3)
             {
                 Rejeitar("Valor solicitado excede o limite permitido.");
-                return false;
+                return;
             }
+
+            //Se a renda mensal for menor que 1000, rejeita
+            if (RendaMensal < 1000)
+            {
+                Rejeitar("Renda mensal insuficiente para aprovação.");
+                return;
+            }
+
             // Se passar na avaliação, aprova a proposta
             Aprovar();
-            return true;
+            return;
         }
 
         private void Rejeitar(string motivo)

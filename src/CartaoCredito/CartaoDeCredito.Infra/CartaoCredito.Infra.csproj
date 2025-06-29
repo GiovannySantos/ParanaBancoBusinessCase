@@ -17,10 +17,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageReference Include="Polly" Version="8.6.1" />
+    <PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CartaoCredito.Application\CartaoCredito.Application.csproj" />
     <ProjectReference Include="..\CartaoDeCredito.Domain\CartaoCredito.Domain.csproj" />
   </ItemGroup>
 

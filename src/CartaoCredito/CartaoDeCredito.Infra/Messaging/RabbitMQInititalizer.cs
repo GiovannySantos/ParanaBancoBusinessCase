@@ -1,11 +1,11 @@
-﻿using CadastroClientes.Infra.Settings;
+﻿using CartaoCredito.Infra.Settings;
 using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 
-namespace CadastroClientes.Infra.Messaging
+namespace CartaoCredito.Infra.Messaging
 {
     public class RabbitMQInitializer(IOptions<RabbitMQSettings> options)
     {
@@ -24,18 +24,17 @@ namespace CadastroClientes.Infra.Messaging
 
             await _retryPolicy.ExecuteAsync(async () =>
             {
-                // Tenta criar uma conexão com o RabbitMQ
                 await using var connection = await factory.CreateConnectionAsync();
                 await using var channel = await connection.CreateChannelAsync();
 
-                // Declara o exchange necessário
-                await channel.ExchangeDeclareAsync(exchange: "cadastro.clientes.events", ExchangeType.Direct, durable: true, autoDelete: false);
+                // Declara o exchange necessário para publicar mensagens
+                await channel.ExchangeDeclareAsync(exchange: "cartao.credito.events", ExchangeType.Direct, durable: true, autoDelete: false);
 
                 // Declara a fila necessária para receber mensagens
-                await channel.QueueDeclareAsync(queue: "cartao.criado.queue", durable: true, exclusive: false, autoDelete: false, arguments: null);
-
+                await channel.QueueDeclareAsync(queue: "cartao.proposta.aprovada.queue", durable: true, exclusive: false, autoDelete: false, arguments: null);
+                
                 // Liga a fila ao exchange com a chave de roteamento
-                await channel.QueueBindAsync(queue: "cartao.criado.queue", exchange: "cartao.credito.events", routingKey: "cartao.credito.criado");
+                await channel.QueueBindAsync(queue: "cartao.proposta.aprovada.queue", exchange: "proposta.credito.events", routingKey: "proposta.aprovada");
             });
 
 
