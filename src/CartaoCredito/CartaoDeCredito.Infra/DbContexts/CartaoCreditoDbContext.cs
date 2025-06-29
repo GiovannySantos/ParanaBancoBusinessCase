@@ -1,8 +1,7 @@
-﻿using CartaoDeCredito.Domain.Entidades;
-using CartaoDeCredito.Infra.Configuration;
+﻿using CartaoCredito.Infra.Configuration;
 using Microsoft.EntityFrameworkCore;
 
-namespace CartaoDeCredito.Infra.DbContexts
+namespace CartaoCredito.Infra.DbContexts
 {
     public class CartaoCreditoDbContext : DbContext
     {
@@ -10,7 +9,7 @@ namespace CartaoDeCredito.Infra.DbContexts
         {
         }
 
-        public DbSet<CartaoCredito> CartoesCredito { get; set; }
+        public DbSet<CartaoDeCredito.Domain.Entidades.CartaoCredito> CartoesCredito { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

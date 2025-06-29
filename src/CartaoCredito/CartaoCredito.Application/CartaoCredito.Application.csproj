@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CartaoDeCredito.Domain\CartaoDeCredito.Domain.csproj" />
+    <ProjectReference Include="..\CartaoDeCredito.Domain\CartaoCredito.Domain.csproj" />
   </ItemGroup>
 
 </Project>

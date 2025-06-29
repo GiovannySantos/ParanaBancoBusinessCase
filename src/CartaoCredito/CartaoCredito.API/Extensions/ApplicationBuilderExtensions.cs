@@ -1,4 +1,4 @@
-﻿using CartaoDeCredito.Infra.DbContexts;
+﻿using CartaoCredito.Infra.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Polly;

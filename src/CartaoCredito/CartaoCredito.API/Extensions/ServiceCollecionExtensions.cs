@@ -1,8 +1,8 @@
 ﻿using CartaoCredito.Application.Interfaces;
 using CartaoCredito.Application.Services;
+using CartaoCredito.Infra.DbContexts;
+using CartaoCredito.Infra.Repositories;
 using CartaoDeCredito.Domain.Interfaces;
-using CartaoDeCredito.Infra.DbContexts;
-using CartaoDeCredito.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace CartaoCredito.API.Extensions;

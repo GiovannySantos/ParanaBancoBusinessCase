@@ -21,9 +21,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartaoCredito.API", "Cartao
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartaoCredito.Application", "CartaoCredito\CartaoCredito.Application\CartaoCredito.Application.csproj", "{E4A5157D-6497-4B41-A0A9-91702D5DAAA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartaoDeCredito.Domain", "CartaoCredito\CartaoDeCredito.Domain\CartaoDeCredito.Domain.csproj", "{FA60E420-1609-45FE-8025-764D8968783F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartaoCredito.Domain", "CartaoCredito\CartaoDeCredito.Domain\CartaoCredito.Domain.csproj", "{FA60E420-1609-45FE-8025-764D8968783F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartaoDeCredito.Infra", "CartaoCredito\CartaoDeCredito.Infra\CartaoDeCredito.Infra.csproj", "{4E6ECD75-95EE-460E-B686-814AAED8507E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartaoCredito.Infra", "CartaoCredito\CartaoDeCredito.Infra\CartaoCredito.Infra.csproj", "{4E6ECD75-95EE-460E-B686-814AAED8507E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropostaCredito.API", "PropostaCredito\PropostaCredito.API\PropostaCredito.API.csproj", "{B2428623-D4B4-47F9-88A5-6A8AC922DA4F}"
 EndProject

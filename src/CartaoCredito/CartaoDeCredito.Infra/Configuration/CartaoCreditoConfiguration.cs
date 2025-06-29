@@ -1,12 +1,11 @@
-﻿using CartaoDeCredito.Domain.Entidades;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CartaoDeCredito.Infra.Configuration
+namespace CartaoCredito.Infra.Configuration
 {
-    public class CartaoCreditoConfiguration : IEntityTypeConfiguration<CartaoCredito>
+    public class CartaoCreditoConfiguration : IEntityTypeConfiguration<CartaoDeCredito.Domain.Entidades.CartaoCredito>
     {
-        public void Configure(EntityTypeBuilder<CartaoCredito> builder)
+        public void Configure(EntityTypeBuilder<CartaoDeCredito.Domain.Entidades.CartaoCredito> builder)
         {
             builder.ToTable("CartoesCredito");
 

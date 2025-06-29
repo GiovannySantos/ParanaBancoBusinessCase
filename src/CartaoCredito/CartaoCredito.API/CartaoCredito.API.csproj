@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CartaoCredito.Application\CartaoCredito.Application.csproj" />
-    <ProjectReference Include="..\CartaoDeCredito.Infra\CartaoDeCredito.Infra.csproj" />
+    <ProjectReference Include="..\CartaoDeCredito.Infra\CartaoCredito.Infra.csproj" />
   </ItemGroup>
 
 </Project>
