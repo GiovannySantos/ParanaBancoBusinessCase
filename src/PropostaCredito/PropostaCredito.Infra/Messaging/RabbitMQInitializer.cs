@@ -29,7 +29,7 @@ namespace PropostaCredito.Infra.Messaging
                 await using var channel = await connection.CreateChannelAsync();
 
                 // Declara o exchange necessário
-                await channel.ExchangeDeclareAsync(exchange: "propostas.events", ExchangeType.Direct, durable: true, autoDelete: false);
+                await channel.ExchangeDeclareAsync(exchange: "proposta.credito.events", ExchangeType.Direct, durable: true, autoDelete: false);
             });
 
 
