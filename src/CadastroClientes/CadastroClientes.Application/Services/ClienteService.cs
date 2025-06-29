@@ -7,16 +7,10 @@ using CadastroClientes.Domain.Interfaces;
 
 namespace CadastroClientes.Application.Services
 {
-    public class ClienteService : IClienteService
+    public class ClienteService(IClienteRepository clienteRepository, IEventPublisher eventPublisher) : IClienteService
     {
-        private readonly IClienteRepository _clienteRepository;
-        private readonly IEventPublisher _publisher;
-
-        public ClienteService(IClienteRepository clienteRepository, IEventPublisher eventPublisher)
-        {
-            _clienteRepository = clienteRepository;
-            _publisher = eventPublisher;
-        }
+        private readonly IClienteRepository _clienteRepository = clienteRepository;
+        private readonly IEventPublisher _publisher = eventPublisher;
 
         public async Task<ClientesResult> CadastrarAsync(ClienteDto clienteDto)
         {

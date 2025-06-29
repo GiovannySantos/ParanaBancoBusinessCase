@@ -4,14 +4,10 @@ using PropostaCredito.Application.Interfaces;
 
 namespace PropostaCredito.API.Controllers
 {
-    public class PropostaController : ControllerBase
+    public class PropostaController(IPropostaService propostaService) : ControllerBase
     {
         // Aqui você pode injetar o repositório de propostas e outros serviços necessários
-        private readonly IPropostaService _propostaService;
-        public PropostaController(IPropostaService propostaService)
-        {
-            _propostaService = propostaService;
-        }
+        private readonly IPropostaService _propostaService = propostaService;
 
         [HttpPost("/[controller]")]
         public async Task<IActionResult> Proposta([FromBody] PropostaDto propostaDto)

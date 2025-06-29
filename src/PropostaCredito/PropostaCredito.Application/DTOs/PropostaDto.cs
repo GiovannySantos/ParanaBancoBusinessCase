@@ -1,17 +1,9 @@
 ﻿namespace PropostaCredito.Application.DTOs
 {
-    public class PropostaDto
+    public class PropostaDto(Guid clienteId, decimal valorSolicitado, decimal rendaMensal)
     {
-        public Guid ClienteId { get; set; }
-        public decimal RendaMensal { get; set; }
-        public decimal ValorSolicitado { get; set; }
-        public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
-
-        public PropostaDto(Guid clienteId, decimal valorSolicitado, decimal rendaMensal)
-        {
-            ClienteId = clienteId;
-            ValorSolicitado = valorSolicitado;
-            RendaMensal = rendaMensal;
-        }
+        public Guid ClienteId { get; set; } = clienteId;
+        public decimal RendaMensal { get; set; } = rendaMensal;
+        public decimal ValorSolicitado { get; set; } = valorSolicitado;
     }
 }

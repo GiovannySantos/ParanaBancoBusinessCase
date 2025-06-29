@@ -1,18 +1,13 @@
-﻿using CartaoCredito.Infra.DbContexts;
-using CartaoDeCredito.Domain.Interfaces;
+﻿using CartaoCredito.Domain.Interfaces;
+using CartaoCredito.Infra.DbContexts;
 
 namespace CartaoCredito.Infra.Repositories
 {
-    public class CartaoCreditoRepository : ICartaoCreditoRepository
+    public class CartaoCreditoRepository(CartaoCreditoDbContext context) : ICartaoCreditoRepository
     {
-        private readonly CartaoCreditoDbContext _context;
+        private readonly CartaoCreditoDbContext _context = context;
 
-        public CartaoCreditoRepository(CartaoCreditoDbContext context)
-        {
-            _context = context; 
-        }
-
-        public async Task<CartaoDeCredito.Domain.Entidades.CartaoCredito> CadastrarAsync(CartaoDeCredito.Domain.Entidades.CartaoCredito cartaoCredito)
+        public async Task<Domain.Entidades.CartaoCredito> CadastrarAsync(Domain.Entidades.CartaoCredito cartaoCredito)
         {
             if (cartaoCredito == null)
             {

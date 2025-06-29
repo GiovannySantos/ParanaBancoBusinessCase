@@ -3,7 +3,9 @@ using PropostaCredito.Application.Interfaces;
 using PropostaCredito.Application.Services;
 using PropostaCredito.Domain.Interfaces;
 using PropostaCredito.Infra.DbContexts;
+using PropostaCredito.Infra.Messaging;
 using PropostaCredito.Infra.Repositories;
+using PropostaCredito.Infra.Settings;
 
 namespace PropostaCredito.API.Extensions
 {
@@ -24,10 +26,10 @@ namespace PropostaCredito.API.Extensions
             });
 
             // Messaging Layer
-            //builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
+            builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
 
-            //builder.Services.AddSingleton<RabbitMQInitializer>();
-            //builder.Services.AddSingleton<IEventPublisher, RabbitMQPublisher>();
+            builder.Services.AddSingleton<RabbitMQInitializer>();
+            builder.Services.AddSingleton<IEventPublisher, RabbitMQPublisher>();
 
             // Application Layer
             services.AddScoped<IPropostaService, PropostaService>();

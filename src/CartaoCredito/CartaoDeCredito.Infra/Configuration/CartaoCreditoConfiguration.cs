@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CartaoCredito.Infra.Configuration
 {
-    public class CartaoCreditoConfiguration : IEntityTypeConfiguration<CartaoDeCredito.Domain.Entidades.CartaoCredito>
+    public class CartaoCreditoConfiguration : IEntityTypeConfiguration<Domain.Entidades.CartaoCredito>
     {
-        public void Configure(EntityTypeBuilder<CartaoDeCredito.Domain.Entidades.CartaoCredito> builder)
+        public void Configure(EntityTypeBuilder<Domain.Entidades.CartaoCredito> builder)
         {
             builder.ToTable("CartoesCredito");
 

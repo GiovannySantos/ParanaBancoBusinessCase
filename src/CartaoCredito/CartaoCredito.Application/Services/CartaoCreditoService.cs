@@ -1,18 +1,14 @@
-﻿using CartaoCredito.Application.Interfaces;
+﻿using CartaoCredito.Application.DTOs;
+using CartaoCredito.Application.Interfaces;
 using CartaoCredito.Application.Results;
-using CartaoDeCredito.Domain.Interfaces;
+using CartaoCredito.Domain.Interfaces;
 
 namespace CartaoCredito.Application.Services
 {
-    public class CartaoCreditoService : ICartaoCreditoService
+    public class CartaoCreditoService(ICartaoCreditoRepository cartaoCreditoRepository) : ICartaoCreditoService
     {
 
-        private readonly ICartaoCreditoRepository _cartaoCreditoRepository;
-
-        public CartaoCreditoService(ICartaoCreditoRepository cartaoCreditoRepository)
-        {
-            _cartaoCreditoRepository = cartaoCreditoRepository;
-        }
+        private readonly ICartaoCreditoRepository _cartaoCreditoRepository = cartaoCreditoRepository;
 
         public async Task<CartaoCreditoResult> CadastrarAsync(CartaoCreditoDto cartaoCreditoDto)
         {

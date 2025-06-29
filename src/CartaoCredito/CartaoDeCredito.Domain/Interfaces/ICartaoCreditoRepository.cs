@@ -1,9 +1,7 @@
-﻿using CartaoDeCredito.Domain.Entidades;
-
-namespace CartaoDeCredito.Domain.Interfaces
+﻿namespace CartaoCredito.Domain.Interfaces
 {
     public interface ICartaoCreditoRepository
     {
-        Task<CartaoCredito> CadastrarAsync(CartaoCredito cartaoCredito);
+        Task<Entidades.CartaoCredito> CadastrarAsync(Entidades.CartaoCredito cartaoCredito);
     }
 }

@@ -3,13 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CartaoCredito.Infra.DbContexts
 {
-    public class CartaoCreditoDbContext : DbContext
+    public class CartaoCreditoDbContext(DbContextOptions<CartaoCreditoDbContext> options) : DbContext(options)
     {
-        public CartaoCreditoDbContext(DbContextOptions<CartaoCreditoDbContext> options) : base(options)
-        {
-        }
-
-        public DbSet<CartaoDeCredito.Domain.Entidades.CartaoCredito> CartoesCredito { get; set; }
+        public DbSet<Domain.Entidades.CartaoCredito> CartoesCredito { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

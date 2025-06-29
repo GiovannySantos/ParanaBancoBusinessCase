@@ -1,4 +1,4 @@
-﻿namespace CadastroClientes.Application.Messaging
+﻿namespace PropostaCredito.Application.Messaging
 {
     public class PublishProperties(string exchange, string exchangeType, string routingKey, bool mandatory = true, bool durable = true)
     {

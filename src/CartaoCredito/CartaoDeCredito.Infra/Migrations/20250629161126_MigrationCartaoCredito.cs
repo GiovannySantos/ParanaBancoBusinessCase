@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CartaoDeCredito.Infra.Migrations
+namespace CartaoCredito.Infra.Migrations
 {
     /// <inheritdoc />
     public partial class MigrationCartaoCredito : Migration

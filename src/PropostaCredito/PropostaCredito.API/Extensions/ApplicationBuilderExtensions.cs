@@ -2,6 +2,7 @@
 using Npgsql;
 using Polly;
 using PropostaCredito.Infra.DbContexts;
+using PropostaCredito.Infra.Messaging;
 
 namespace PropostaCredito.API.Extensions
 {
@@ -37,10 +38,10 @@ namespace PropostaCredito.API.Extensions
 
         public static async Task InitializeMessagingAsync(this WebApplication app)
         {
-            //using var scope = app.Services.CreateScope();
+            using var scope = app.Services.CreateScope();
 
-            //var initializer = scope.ServiceProvider.GetRequiredService<RabbitMQInitializer>();
-            //await initializer.InitializeAsync();
+            var initializer = scope.ServiceProvider.GetRequiredService<RabbitMQInitializer>();
+            await initializer.InitializeAsync();
         }
     }
 }

@@ -5,14 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CadastroClientes.API.Controllers
 {
-    public class ClientesController : ControllerBase
+    public class ClientesController(IClienteService clienteService) : ControllerBase
     {
-        private readonly IClienteService _clienteService;
-
-        public ClientesController(IClienteService clienteService)
-        {
-            _clienteService = clienteService;
-        }
+        private readonly IClienteService _clienteService = clienteService;
 
         [HttpPost("/[controller]")]
         public async Task<IActionResult> Cadastrar([FromBody] ClienteDto clienteDto)

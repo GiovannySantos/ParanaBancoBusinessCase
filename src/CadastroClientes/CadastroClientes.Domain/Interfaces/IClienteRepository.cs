@@ -6,6 +6,6 @@ namespace CadastroClientes.Domain.Interfaces
     {
         Task<Cliente> CadastrarAsync(Cliente cliente);
         bool ExistePorCpf(string cpf);
-        Task<Cliente> ObterPorCpf(string cpf);
+        Task<Cliente?> ObterPorCpf(string cpf);
     }
 }

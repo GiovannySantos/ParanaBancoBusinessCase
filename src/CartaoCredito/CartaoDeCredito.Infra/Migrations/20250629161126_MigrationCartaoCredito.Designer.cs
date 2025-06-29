@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CartaoDeCredito.Infra.Migrations
+namespace CartaoCredito.Infra.Migrations
 {
     [DbContext(typeof(CartaoCreditoDbContext))]
     [Migration("20250629161126_MigrationCartaoCredito")]

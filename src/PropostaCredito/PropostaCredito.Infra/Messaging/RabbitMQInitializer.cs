@@ -1,11 +1,11 @@
-﻿using CadastroClientes.Infra.Settings;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
+using PropostaCredito.Infra.Settings;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 
-namespace CadastroClientes.Infra.Messaging
+namespace PropostaCredito.Infra.Messaging
 {
     public class RabbitMQInitializer(IOptions<RabbitMQSettings> options)
     {
@@ -29,7 +29,7 @@ namespace CadastroClientes.Infra.Messaging
                 await using var channel = await connection.CreateChannelAsync();
 
                 // Declara o exchange necessário
-                await channel.ExchangeDeclareAsync(exchange: "cadastro.clientes.events", ExchangeType.Direct, durable: true, autoDelete: false);
+                await channel.ExchangeDeclareAsync(exchange: "propostas.events", ExchangeType.Direct, durable: true, autoDelete: false);
             });
 
 

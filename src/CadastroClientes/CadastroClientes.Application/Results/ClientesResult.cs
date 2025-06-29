@@ -1,16 +1,9 @@
 ﻿namespace CadastroClientes.Application.Results
 {
-    public class ClientesResult
+    public class ClientesResult(bool sucesso, object mensagem)
     {
-        public bool Sucesso { get; set; }
+        public bool Sucesso { get; private set; } = sucesso;
 
-        public object Mensagem { get; set; }
-
-        public ClientesResult(bool sucesso, object mensagem)
-        {
-            Sucesso = sucesso;
-            Mensagem = mensagem;
-        }
-
+        public object Mensagem { get; private set; } = mensagem;
     }
 }

@@ -1,4 +1,5 @@
 ﻿
+using CartaoCredito.Application.DTOs;
 using CartaoCredito.Application.Results;
 
 namespace CartaoCredito.Application.Interfaces

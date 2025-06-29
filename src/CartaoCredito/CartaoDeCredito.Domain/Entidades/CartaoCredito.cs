@@ -1,4 +1,4 @@
-﻿namespace CartaoDeCredito.Domain.Entidades
+﻿namespace CartaoCredito.Domain.Entidades
 {
     public class CartaoCredito
     {
@@ -15,7 +15,7 @@
 
         private CartaoCredito() { }
 
-        public CartaoCredito(Guid propostaId,Guid clienteId, string nomeImpresso, decimal limite)
+        public CartaoCredito(Guid propostaId, Guid clienteId, string nomeImpresso, decimal limite)
         {
             Id = Guid.NewGuid();
             PropostaId = propostaId;

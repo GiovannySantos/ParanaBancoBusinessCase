@@ -3,12 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CadastroClientes.Infra.DbContexts
 {
-    public class CadastroClientesDbContext : DbContext
+    public class CadastroClientesDbContext(DbContextOptions<CadastroClientesDbContext> options) : DbContext(options)
     {
-        public CadastroClientesDbContext(DbContextOptions<CadastroClientesDbContext> options) : base(options)
-        {
-        }
-
         public DbSet<Cliente> Clientes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

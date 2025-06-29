@@ -1,15 +1,9 @@
 ﻿namespace PropostaCredito.Application.Results
 {
-    public class PropostaResult
+    public class PropostaResult(bool sucesso, object mensagem)
     {
-        public bool Sucesso { get; set; }
+        public bool Sucesso { get; set; } = sucesso;
 
-        public object Mensagem { get; set; }
-
-        public PropostaResult(bool sucesso, object mensagem)
-        {
-            Sucesso = sucesso;
-            Mensagem = mensagem;
-        }
+        public object Mensagem { get; set; } = mensagem;
     }
 }

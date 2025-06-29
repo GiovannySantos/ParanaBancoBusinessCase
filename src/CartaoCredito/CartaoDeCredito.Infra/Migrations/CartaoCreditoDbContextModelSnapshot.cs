@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CartaoDeCredito.Infra.Migrations
+namespace CartaoCredito.Infra.Migrations
 {
     [DbContext(typeof(CartaoCreditoDbContext))]
     partial class CartaoCreditoDbContextModelSnapshot : ModelSnapshot
