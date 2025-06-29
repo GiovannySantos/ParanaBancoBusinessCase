@@ -10,11 +10,10 @@ public static class ApplicationBuilderExtensions
 {
     public static void ConfigurePipeline(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+
+        app.UseSwagger();
+        app.UseSwaggerUI();
+
 
         app.UseHttpsRedirection();
         app.UseAuthorization();
@@ -42,7 +41,7 @@ public static class ApplicationBuilderExtensions
     public static async Task InitializeMessagingAsync(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
-        
+
         var initializer = scope.ServiceProvider.GetRequiredService<RabbitMQInitializer>();
         await initializer.InitializeAsync();
     }

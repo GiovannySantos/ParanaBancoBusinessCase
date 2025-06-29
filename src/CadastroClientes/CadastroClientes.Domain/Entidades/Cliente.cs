@@ -3,7 +3,7 @@
     public class Cliente
     {
         public Guid Id { get; private set; } = Guid.NewGuid();
-     
+
         //Dados pessoais
         public string Nome { get; private set; }
         public string Cpf { get; private set; }

@@ -2,15 +2,15 @@ services:
   cadastro-clientes-api:
     build:
       context: .
-      dockerfile: CadastroClientes/CadastroClientes.API/Dockerfile
+      dockerfile: ./CadastroClientes/CadastroClientes.API/Dockerfile
+      args:
+        - BUILD_CONFIGURATION=Release
     container_name: cadastro-clientes-api
     ports:
       - "5001:8080"
     depends_on:
-      postgres:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+      - postgres
+      - rabbitmq
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=CadastroClientes;Username=root;Password=root
@@ -21,15 +21,15 @@ services:
   proposta-credito-api:
     build:
       context: .
-      dockerfile: PropostaCredito/PropostaCredito.API/Dockerfile
+      dockerfile: ./PropostaCredito/PropostaCredito.API/Dockerfile
+      args:
+        - BUILD_CONFIGURATION=Release
     container_name: proposta-credito-api
     ports:
       - "5002:8080"
     depends_on:
-      postgres:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+      - postgres
+      - rabbitmq
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=PropostaCredito;Username=root;Password=root
@@ -40,16 +40,15 @@ services:
   cartao-credito-api:
     build:
       context: .
-      dockerfile: CartaoCredito/CartaoCredito.API/Dockerfile
+      dockerfile: ./CartaoCredito/CartaoCredito.API/Dockerfile
+      args:
+        - BUILD_CONFIGURATION=Release
     container_name: cartao-credito-api
     ports:
       - "5003:8080"
     depends_on:
-      postgres:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-
+      - postgres
+      - rabbitmq
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=CartaoCredito;Username=root;Password=root
@@ -58,41 +57,37 @@ services:
       - paranabanco-net
 
   postgres:
-    image: postgres:15
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U root" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    image: postgres:15-alpine
     container_name: postgres
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - paranabanco-net
-    profiles:
-      - infra
-
-  rabbitmq:
-    image: rabbitmq:3-management
     healthcheck:
-      test: [ "CMD", "rabbitmq-diagnostics", "status" ]
+      test: ["CMD-SHELL", "pg_isready -U root"]
       interval: 10s
       timeout: 5s
       retries: 5
-    container_name: rabbitmq
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5672:5672" # Porta da mensageria
-      - "15672:15672" # UI do RabbitMQ
+      - "5432:5432"
     networks:
       - paranabanco-net
-    profiles:
-      - infra
+
+  rabbitmq:
+    image: rabbitmq:3.11-management-alpine
+    container_name: rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - paranabanco-net
 
 networks:
   paranabanco-net:

@@ -2,8 +2,8 @@
 using CadastroClientes.Application.Interfaces;
 using CadastroClientes.Application.Results;
 using CadastroClientes.Domain.Entidades;
-using CadastroClientes.Domain.Interfaces;
 using CadastroClientes.Domain.Events;
+using CadastroClientes.Domain.Interfaces;
 
 namespace CadastroClientes.Application.Services
 {

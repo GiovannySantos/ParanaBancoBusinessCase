@@ -10,7 +10,7 @@ namespace PropostaCredito.Infra.DbContexts
         }
 
         public DbSet<Proposta> Propostas { get; set; }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

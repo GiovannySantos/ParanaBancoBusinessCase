@@ -14,7 +14,7 @@ namespace PropostaCredito.API.Controllers
         }
 
         [HttpPost("/[controller]")]
-        public async Task<IActionResult> Proposta(PropostaDto propostaDto) 
+        public async Task<IActionResult> Proposta([FromBody] PropostaDto propostaDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

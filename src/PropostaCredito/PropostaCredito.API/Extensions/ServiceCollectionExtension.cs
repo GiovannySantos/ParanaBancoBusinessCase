@@ -1,9 +1,9 @@
-﻿using PropostaCredito.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PropostaCredito.Application.Interfaces;
 using PropostaCredito.Application.Services;
 using PropostaCredito.Domain.Interfaces;
 using PropostaCredito.Infra.DbContexts;
 using PropostaCredito.Infra.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace PropostaCredito.API.Extensions
 {

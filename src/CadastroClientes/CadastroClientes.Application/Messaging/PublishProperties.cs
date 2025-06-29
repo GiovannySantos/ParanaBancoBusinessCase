@@ -8,7 +8,7 @@
         public bool Mandatory { get; set; }
         public bool Durable { get; set; }
 
-        public PublishProperties(string exchange, string exchangeType, string routingKey, bool mandatory = true, bool durable = true) 
+        public PublishProperties(string exchange, string exchangeType, string routingKey, bool mandatory = true, bool durable = true)
         {
             Exchange = exchange;
             ExchangeType = exchangeType;

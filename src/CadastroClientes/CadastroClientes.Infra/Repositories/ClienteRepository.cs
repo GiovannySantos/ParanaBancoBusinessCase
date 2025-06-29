@@ -1,5 +1,4 @@
-﻿using CadastroClientes.Application.DTOs;
-using CadastroClientes.Domain.Entidades;
+﻿using CadastroClientes.Domain.Entidades;
 using CadastroClientes.Domain.Interfaces;
 using CadastroClientes.Infra.DbContexts;
 using Microsoft.EntityFrameworkCore;
