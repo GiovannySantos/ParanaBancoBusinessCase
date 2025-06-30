@@ -153,15 +153,6 @@ Content-Type: application/json
 }
 ```
 
----
-
-### 🧪 Testes
-
-* Testes unitários e de integração podem ser realizados com `xUnit`
-* Você pode simular falhas publicando manualmente eventos com payloads inválidos nas filas
-
----
-
 ### 🛡️ Resiliência
 
 * **Retry (Polly):** chamadas com falha transitória são repetidas com políticas de backoff
