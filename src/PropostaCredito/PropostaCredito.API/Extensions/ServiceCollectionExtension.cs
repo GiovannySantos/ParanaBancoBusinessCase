@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PropostaCredito.API.Workers;
 using PropostaCredito.Application.Interfaces;
 using PropostaCredito.Application.Services;
 using PropostaCredito.Domain.Interfaces;
@@ -36,6 +37,9 @@ namespace PropostaCredito.API.Extensions
 
             // Domain/Infra Layer
             services.AddScoped<IPropostaRepository, PropostaRepository>();
+
+            //Background Services
+            builder.Services.AddHostedService<ClienteCadastradoConsumer>();
 
             services.AddControllers();
             services.AddEndpointsApiExplorer();

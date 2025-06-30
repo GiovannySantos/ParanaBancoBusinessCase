@@ -2,7 +2,8 @@
 using PropostaCredito.Application.Interfaces;
 using PropostaCredito.Application.Results;
 using PropostaCredito.Domain.Entidades;
-using PropostaCredito.Domain.Events;
+using PropostaCredito.Domain.Events.Consumers;
+using PropostaCredito.Domain.Events.Publishers;
 using PropostaCredito.Domain.Interfaces;
 
 namespace PropostaCredito.Application.Services
@@ -13,29 +14,39 @@ namespace PropostaCredito.Application.Services
         private readonly IPropostaRepository _propostaRepository = propostaRepository;
         private readonly IEventPublisher _publisher = eventPublisher;
 
-        public async Task<PropostaResult> CadastrarAsync(PropostaDto propostaDto)
+        public async Task<PropostaResult> InserirAsync(PropostaDto propostaDto)
         {
-            var validacoes = ValidarPropostaDto(propostaDto);
+            var validacoes = Validar(propostaDto);
             if (validacoes != null && validacoes.Count > 0)
                 return new(false, validacoes);
 
             Proposta? proposta = await _propostaRepository.CadastrarAsync(new(propostaDto.ClienteId, propostaDto.ValorSolicitado, propostaDto.RendaMensal));
+
+            return new(true, proposta);
+        }
+
+        public async Task<PropostaResult> CadastrarAsync(ClienteCadastradoEvent evento)
+        {
+            var validacoes = Validar(evento);
+            if (validacoes != null && validacoes.Count > 0)
+                return new(false, validacoes);
+
+            Proposta proposta = new(evento.ClienteId, evento.ValorCreditoDesejado, evento.RendaMensal);
+            await _propostaRepository.CadastrarAsync(proposta);
 
             //Notificar os serviços que a proposta foi criada (aprovada ou não)
             if (proposta.Aprovada)
             {
                 // Publica o evento de proposta aprovada para o serviço de cartão de crédito
                 await PublishPropostaAprovada(proposta);
+                return new(true, proposta);
             }
             else
             {
-                // Publica o evento de proposta reprovada para o serviço de cadastro de clientes
-                await PublishPropostaReprovada(proposta);
-                return new(true, proposta);
+                // Erro no processamento da proposta
+
+                return new(false, proposta);
             }
-
-            return new(true, proposta);
-
         }
 
         private async Task PublishPropostaAprovada(Proposta proposta)
@@ -50,36 +61,23 @@ namespace PropostaCredito.Application.Services
             await _publisher.PublishAsync(propostaCriadaEvent, new("proposta.credito.events", "direct", "proposta.aprovada"));
         }
 
-        private async Task PublishPropostaReprovada(Proposta proposta)
-        {
-            var propostaReprovadaEvent = new PropostaEvent(
-                proposta.Id,
-                proposta.ClienteId,
-                proposta.ValorSolicitado,
-                proposta.Aprovada,
-                proposta.MotivoRejeicao ?? string.Empty
-            );
-            await _publisher.PublishAsync(propostaReprovadaEvent, new("proposta.credito.events", "direct", "proposta.reprovada"));
-        }
-
         public Task<PropostaResult> ObterPropostaAsync(Guid idProposta)
         {
             throw new NotImplementedException();
         }
 
         //Valida somente o básico, as validações de negócio estão na entidade Proposta
-        private static List<string>? ValidarPropostaDto(PropostaDto propostaDto)
+        private static List<string>? Validar(object proposta)
         {
-            var erros = new List<string>();
-            if (propostaDto.RendaMensal <= 0)
+            List<string> erros = [];
+
+            if (((ClienteCadastradoEvent)proposta).RendaMensal <= 0)
                 erros.Add("Renda mensal deve ser maior que zero.");
 
-
-            if (propostaDto.ValorSolicitado <= 0)
+            if (((ClienteCadastradoEvent)proposta).ValorCreditoDesejado <= 0)
                 erros.Add("Valor solicitado deve ser maior que zero.");
 
-
-            if (propostaDto.ClienteId == Guid.Empty)
+            if (((ClienteCadastradoEvent)proposta).ClienteId == Guid.Empty)
                 erros.Add("ClienteId é obrigatório.");
 
             return erros.Count > 0 ? erros : null;

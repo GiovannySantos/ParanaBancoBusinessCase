@@ -77,7 +77,7 @@ namespace CadastroClientes.API.Workers
                 });
 
             // Cria um escopo de serviço para resolver o IClienteService
-            using var scope = _serviceScopeFactory.CreateScope();
+            using var scope =  _serviceScopeFactory.CreateScope();
             var clienteService = scope.ServiceProvider.GetRequiredService<IClienteService>();
             
             await retryPolicy.ExecuteAsync(() => clienteService.VincularCartaoClienteAsync(evento));

@@ -16,7 +16,7 @@ namespace PropostaCredito.API.Controllers
                 return BadRequest(ModelState);
 
             // Aqui você pode chamar o serviço para cadastrar a proposta
-            var resultado = await _propostaService.CadastrarAsync(propostaDto);
+            var resultado = await _propostaService.InserirAsync(propostaDto);
             return CreatedAtAction(nameof(Proposta), resultado);
         }
     }

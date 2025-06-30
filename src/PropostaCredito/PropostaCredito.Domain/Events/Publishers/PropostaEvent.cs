@@ -1,5 +1,4 @@
-﻿
-namespace PropostaCredito.Domain.Events
+﻿namespace PropostaCredito.Domain.Events.Publishers
 {
     public class PropostaEvent(Guid id, Guid clienteId, decimal valorAprovado, bool aprovado, string motivoRejeicao)
     {
