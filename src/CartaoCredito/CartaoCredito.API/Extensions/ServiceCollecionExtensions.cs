@@ -2,7 +2,9 @@
 using CartaoCredito.Application.Services;
 using CartaoCredito.Domain.Interfaces;
 using CartaoCredito.Infra.DbContexts;
+using CartaoCredito.Infra.Messaging;
 using CartaoCredito.Infra.Repositories;
+using CartaoCredito.Infra.Settings;
 using Microsoft.EntityFrameworkCore;
 
 namespace CartaoCredito.API.Extensions;
@@ -24,10 +26,10 @@ public static class ServiceCollectionExtensions
         });
 
         // Messaging Layer
-        //builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
+        builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
 
-        //builder.Services.AddSingleton<RabbitMQInitializer>();
-        //builder.Services.AddSingleton<IEventPublisher, RabbitMQPublisher>();
+        builder.Services.AddSingleton<RabbitMQInitializer>();
+        builder.Services.AddSingleton<IEventPublisher, RabbitMQPublisher>();
 
         // Application Layer
         services.AddScoped<ICartaoCreditoService, CartaoCreditoService>();

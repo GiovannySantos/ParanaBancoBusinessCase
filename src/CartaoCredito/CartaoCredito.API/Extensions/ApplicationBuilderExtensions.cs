@@ -1,4 +1,5 @@
 ﻿using CartaoCredito.Infra.DbContexts;
+using CartaoCredito.Infra.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Polly;
@@ -38,9 +39,9 @@ public static class ApplicationBuilderExtensions
 
     public static async Task InitializeMessagingAsync(this WebApplication app)
     {
-        //using var scope = app.Services.CreateScope();
+        using var scope = app.Services.CreateScope();
 
-        //var initializer = scope.ServiceProvider.GetRequiredService<RabbitMQInitializer>();
-        //await initializer.InitializeAsync();
+        var initializer = scope.ServiceProvider.GetRequiredService<RabbitMQInitializer>();
+        await initializer.InitializeAsync();
     }
 }

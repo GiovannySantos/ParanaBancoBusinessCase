@@ -6,6 +6,7 @@ namespace CadastroClientes.Infra.DbContexts
     public class CadastroClientesDbContext(DbContextOptions<CadastroClientesDbContext> options) : DbContext(options)
     {
         public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<ClienteCartao> ClienteCartoes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

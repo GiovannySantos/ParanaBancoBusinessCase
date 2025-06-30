@@ -40,21 +40,24 @@ namespace PropostaCredito.Application.Services
 
         private async Task PublishPropostaAprovada(Proposta proposta)
         {
-            var propostaCriadaEvent = new PropostaAprovadaEvent(
+            var propostaCriadaEvent = new PropostaEvent(
                 proposta.Id,
                 proposta.ClienteId,
-                proposta.ValorSolicitado
+                proposta.ValorSolicitado,
+                proposta.Aprovada,
+                proposta.MotivoRejeicao ?? string.Empty
             );
             await _publisher.PublishAsync(propostaCriadaEvent, new("proposta.credito.events", "direct", "proposta.aprovada"));
         }
 
         private async Task PublishPropostaReprovada(Proposta proposta)
         {
-            var propostaReprovadaEvent = new PropostaReprovadaEvent(
+            var propostaReprovadaEvent = new PropostaEvent(
                 proposta.Id,
                 proposta.ClienteId,
                 proposta.ValorSolicitado,
-                proposta.MotivoRejeicao
+                proposta.Aprovada,
+                proposta.MotivoRejeicao ?? string.Empty
             );
             await _publisher.PublishAsync(propostaReprovadaEvent, new("proposta.credito.events", "direct", "proposta.reprovada"));
         }

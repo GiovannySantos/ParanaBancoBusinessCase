@@ -30,13 +30,16 @@ namespace PropostaCredito.Infra.Messaging
 
                 // Declara o exchange necessário
                 await channel.ExchangeDeclareAsync(exchange: "proposta.credito.events", ExchangeType.Direct, durable: true, autoDelete: false);
-
+                await channel.ExchangeDeclareAsync(exchange: "cadastro.clientes.events", ExchangeType.Direct, durable: true, autoDelete: false);
 
                 // Declara a fila necessária para receber mensagens
                 await channel.QueueDeclareAsync(queue: "cliente.cadastrado.queue", durable: true, exclusive: false, autoDelete: false, arguments: null);
                 
-                // Liga a fila ao exchange com a chave de roteamento
-                await channel.QueueBindAsync(queue: "cliente.cadastrado.queue", exchange: "cadastro.clientes.events", routingKey: "cliente.cadastrado");
+                await _retryPolicy.ExecuteAsync(async () =>
+                {
+                    // Liga a fila ao exchange com a chave de roteamento
+                    await channel.QueueBindAsync(queue: "cliente.cadastrado.queue", exchange: "cadastro.clientes.events", routingKey: "cliente.cadastrado");
+                });
             });
 
 

@@ -2,14 +2,16 @@
 using CadastroClientes.Application.Interfaces;
 using CadastroClientes.Application.Results;
 using CadastroClientes.Domain.Entidades;
-using CadastroClientes.Domain.Events;
+using CadastroClientes.Domain.Events.Consumers;
+using CadastroClientes.Domain.Events.Publishers;
 using CadastroClientes.Domain.Interfaces;
 
 namespace CadastroClientes.Application.Services
 {
-    public class ClienteService(IClienteRepository clienteRepository, IEventPublisher eventPublisher) : IClienteService
+    public class ClienteService(IClienteRepository clienteRepository, IClienteCartaoRepository clienteCartaoRepository, IEventPublisher eventPublisher) : IClienteService
     {
         private readonly IClienteRepository _clienteRepository = clienteRepository;
+        private readonly IClienteCartaoRepository _clienteCartaoRepository = clienteCartaoRepository;
         private readonly IEventPublisher _publisher = eventPublisher;
 
         public async Task<ClientesResult> CadastrarAsync(ClienteDto clienteDto)
@@ -51,12 +53,35 @@ namespace CadastroClientes.Application.Services
 
         public async Task<ClientesResult> ObterAsync(string cpf)
         {
-            bool existe = _clienteRepository.ExistePorCpf(cpf);
-            if (!existe)
-                return new(false, "Erro ao buscar - Cliente não encontrado");
-            var cliente = await _clienteRepository.ObterPorCpf(cpf);
 
-            return new(true, new { cliente.Nome, cliente.Email });
+            var cliente = await _clienteRepository.ObterPorCpf(cpf);
+            if (cliente is null)
+                return new(false, "Cliente não encontrado.");
+
+            return new(true, new { cliente });
+        }
+
+        public async Task VincularCartaoClienteAsync(CartaoCreditoCriadoEvent evento)
+        {
+            Cliente? cliente = await _clienteRepository.ObterPorId(evento.ClienteId);
+            if (cliente is null)
+                throw new Exception("Cliente não encontrado para vincular o cartão de crédito.");
+
+            // Verifica se o cartão já está vinculado ao cliente
+            var cartaoExistente = await _clienteCartaoRepository.ObterPorCartaoId(evento.CartaoId);
+            if (cartaoExistente != null)
+                return;
+
+
+            await _clienteCartaoRepository.AdicionarAsync(new ClienteCartao(
+                evento.ClienteId,
+                evento.PropostaId,
+                evento.CartaoId,
+                evento.NumeroCartao,
+                evento.NomeImpresso,
+                evento.Validade,
+                evento.Limite
+            ));
         }
 
         #region Validações do Cliente

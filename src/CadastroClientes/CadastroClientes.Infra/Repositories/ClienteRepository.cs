@@ -15,8 +15,8 @@ namespace CadastroClientes.Infra.Repositories
             return cliente;
         }
 
-        public bool ExistePorCpf(string cpf) => _context.Clientes.Any(x => x.Cpf == cpf);
-
         public async Task<Cliente?> ObterPorCpf(string cpf) => await _context.Clientes.FindAsync(cpf);
+
+        public async Task<Cliente?> ObterPorId(Guid clienteId) => await _context.Clientes.FindAsync(clienteId);
     }
 }

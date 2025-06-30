@@ -1,4 +1,5 @@
-﻿using CadastroClientes.Application.Interfaces;
+﻿using CadastroClientes.API.Workers;
+using CadastroClientes.Application.Interfaces;
 using CadastroClientes.Application.Services;
 using CadastroClientes.Domain.Interfaces;
 using CadastroClientes.Infra.DbContexts;
@@ -36,6 +37,11 @@ public static class ServiceCollectionExtensions
 
         // Domain/Infra Layer
         services.AddScoped<IClienteRepository, ClienteRepository>();
+        services.AddScoped<IClienteCartaoRepository, ClienteCartaoRepository>();
+
+        //Background Services
+        builder.Services.AddHostedService<CartaoCreditoCriadoConsumer>();
+
 
         services.AddControllers();
         services.AddEndpointsApiExplorer();

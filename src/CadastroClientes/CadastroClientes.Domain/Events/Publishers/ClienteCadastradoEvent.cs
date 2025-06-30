@@ -1,4 +1,4 @@
-﻿namespace CadastroClientes.Domain.Events
+﻿namespace CadastroClientes.Domain.Events.Publishers
 {
     public class ClienteCadastradoEvent(Guid clienteId, string nome, string cpf, DateTime dataNascimento, string email, string telefone, decimal rendaMensal, decimal valorCreditoDesejado)
     {
