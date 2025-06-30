@@ -29,7 +29,9 @@ namespace PropostaCredito.Application.Services
         {
             var validacoes = Validar(evento);
             if (validacoes != null && validacoes.Count > 0)
+            {
                 return new(false, validacoes);
+            }
 
             Proposta proposta = new(evento.ClienteId, evento.ValorCreditoDesejado, evento.RendaMensal);
             await _propostaRepository.CadastrarAsync(proposta);
@@ -38,22 +40,23 @@ namespace PropostaCredito.Application.Services
             if (proposta.Aprovada)
             {
                 // Publica o evento de proposta aprovada para o serviço de cartão de crédito
-                await PublishPropostaAprovada(proposta);
+                await PublishPropostaAprovada(proposta, evento);
                 return new(true, proposta);
             }
             else
             {
-                // Erro no processamento da proposta
-
+                var propostaCreditoFalhou = new PropostaCreditoFalhouEvent(proposta.Id, proposta.ClienteId, proposta.MotivoRejeicao);
+                await _publisher.PublishAsync(propostaCreditoFalhou, new("proposta.credito.events", "direct" ,"proposta.credito.falhou"));
                 return new(false, proposta);
             }
         }
 
-        private async Task PublishPropostaAprovada(Proposta proposta)
+        private async Task PublishPropostaAprovada(Proposta proposta, ClienteCadastradoEvent evento)
         {
             var propostaCriadaEvent = new PropostaEvent(
                 proposta.Id,
                 proposta.ClienteId,
+                evento.Nome,
                 proposta.ValorSolicitado,
                 proposta.Aprovada,
                 proposta.MotivoRejeicao ?? string.Empty

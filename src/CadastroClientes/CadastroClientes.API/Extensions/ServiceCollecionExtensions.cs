@@ -34,13 +34,16 @@ public static class ServiceCollectionExtensions
 
         // Application Layer
         services.AddScoped<IClienteService, ClienteService>();
+        services.AddScoped<IClienteCartaoRepository, ClienteCartaoRepository>();
 
         // Domain/Infra Layer
         services.AddScoped<IClienteRepository, ClienteRepository>();
-        services.AddScoped<IClienteCartaoRepository, ClienteCartaoRepository>();
+        services.AddScoped<IEventoErroService, EventoErroService>();
+        services.AddScoped<IEventoErroRepository, EventoErroRepository>();
 
         //Background Services
         builder.Services.AddHostedService<CartaoCreditoCriadoConsumer>();
+        builder.Services.AddHostedService<PropostaCreditoFalhouConsumer>();
 
 
         services.AddControllers();

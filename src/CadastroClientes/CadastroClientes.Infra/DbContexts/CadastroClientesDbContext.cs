@@ -7,6 +7,7 @@ namespace CadastroClientes.Infra.DbContexts
     {
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<ClienteCartao> ClienteCartoes { get; set; }
+        public DbSet<EventoErro> EventosErros { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,4 +1,5 @@
-﻿using CartaoCredito.Application.Interfaces;
+﻿using CartaoCredito.API.Workers;
+using CartaoCredito.Application.Interfaces;
 using CartaoCredito.Application.Services;
 using CartaoCredito.Domain.Interfaces;
 using CartaoCredito.Infra.DbContexts;
@@ -36,6 +37,9 @@ public static class ServiceCollectionExtensions
 
         // Domain/Infra Layer
         services.AddScoped<ICartaoCreditoRepository, CartaoCreditoRepository>();
+
+        //Background Services
+        builder.Services.AddHostedService<PropostaAprovadaConsumer>();
 
         services.AddControllers();
         services.AddEndpointsApiExplorer();

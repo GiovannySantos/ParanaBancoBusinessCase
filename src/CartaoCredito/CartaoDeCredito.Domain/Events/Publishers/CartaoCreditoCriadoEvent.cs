@@ -1,4 +1,4 @@
-﻿namespace CartaoCredito.Domain.Events
+﻿namespace CartaoCredito.Domain.Events.Publishers
 {
     public class CartaoCreditoCriadoEvent(Guid cartaoId, Guid propostaId, Guid clienteId, string numeroCartao, string nomeImpresso, DateTime Validade, decimal limite)
     {

@@ -29,19 +29,21 @@ namespace CadastroClientes.Infra.Messaging
                 await using var channel = await connection.CreateChannelAsync();
 
                 // Declara o exchange necessário
+                await channel.ExchangeDeclareAsync(exchange: "proposta.credito.events", ExchangeType.Direct, durable: true, autoDelete: false);
                 await channel.ExchangeDeclareAsync(exchange: "cadastro.clientes.events", ExchangeType.Direct, durable: true, autoDelete: false);
-
-                // Declara o exchange necessário para consumir mensagens de cartão de crédito, deixa a aplicação mais independente (vai criar a exchange caso o serviço de cartão
-                // ñão tenha sido inicializado ainda, e após a inicialização do serviço de cartão o rabbitmq vai ignorar a nova criação caso a exchange já exista)
                 await channel.ExchangeDeclareAsync(exchange: "cartao.credito.events", ExchangeType.Direct, durable: true, autoDelete: false);
 
-                // Declara a fila necessária para receber mensagens
+                // Declara as fila necessárias para receber mensagens
                 await channel.QueueDeclareAsync(queue: "cartao.criado.queue", durable: true, exclusive: false, autoDelete: false, arguments: null);
+                await channel.QueueDeclareAsync(queue: "proposta.credito.falhou.queue", durable: true, exclusive: false, autoDelete: false, arguments: null);
+                await channel.QueueDeclareAsync(queue: "cartao.credito.falhou.queue", durable: true, exclusive: false, autoDelete: false, arguments: null);
 
                 // Liga a fila ao exchange com a chave de roteamento
                 await _retryPolicy.ExecuteAsync(async () =>
                 {
                     await channel.QueueBindAsync(queue: "cartao.criado.queue", exchange: "cartao.credito.events", routingKey: "cartao.credito.criado");
+                    await channel.QueueBindAsync("proposta.credito.falhou.queue", "proposta.credito.events", "proposta.credito.falhou");
+                    await channel.QueueBindAsync("cartao.credito.falhou.queue", "cartao.credito.events", "cartao.credito.falhou");
                 });
             });
 
