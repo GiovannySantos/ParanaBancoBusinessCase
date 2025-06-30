@@ -96,44 +96,6 @@ docker-compose up --build
 
 ---
 
-### 📬 Topologia de Mensageria - Exchanges, Filas e Bindings
-
-```mermaid
-graph LR
-    subgraph Cadastro de Clientes
-        A1[ClienteCriadoEvent Exchange\nRoutingKey: cliente.criado] --> Q1[PropostaCreditoQueue\nBindingKey: cliente.criado]
-    end
-
-    subgraph Proposta de Crédito
-        Q1 --> S1[Proposta de Crédito Service]
-        S1 --> A2[PropostaGeradaEvent Exchange\nRoutingKey: proposta.gerada]
-        S1 --> A3[PropostaCreditoFalhouEvent Exchange\nRoutingKey: proposta.falha]
-    end
-
-    subgraph Cartão de Crédito
-        A2 --> Q2[CartaoCreditoQueue\nBindingKey: proposta.gerada]
-        Q2 --> S2[Cartão de Crédito Service]
-        S2 --> A4[CartaoEmitidoEvent Exchange\nRoutingKey: cartao.emitido]
-        S2 --> A5[CartaoEmissaoFalhouEvent Exchange\nRoutingKey: cartao.falha]
-    end
-
-    subgraph Cadastro de Clientes Fallback Handler
-        A3 --> Q3[FallbackPropostaQueue\nBindingKey: proposta.falha]
-        A5 --> Q4[FallbackCartaoQueue\nBindingKey: cartao.falha]
-        Q3 --> S3[Cadastro de Clientes: FallbackHandler]
-        Q4 --> S3
-    end
-```
-
-Para monitoramento em tempo real, recomenda-se o uso do **RabbitMQ Management Plugin** (porta 15672), que permite visualizar:
-
-* Exchanges
-* Queues
-* Bindings
-* Dead-letter queues e mensagens em trânsito
-
----
-
 ### 📡 Testando a API
 
 Exemplo de requisição via `curl` ou Postman:
@@ -162,7 +124,6 @@ Content-Type: application/json
 
 ### 📈 Observabilidade
 
-* Logs estruturados com `ILogger`
 * Fallbacks registrados nos consumidores de falha
 * RabbitMQ acessível via [http://localhost:15672](http://localhost:15672)
 
@@ -179,19 +140,7 @@ Content-Type: application/json
 ---
 
 ### 📊 Fluxograma de Processo
-
-```mermaid
-graph TD
-    A[Cliente se cadastra via API] --> B[Evento ClienteCriadoEvent publicado]
-    B --> C[Proposta de Crédito consome evento]
-    C -->|Sucesso| D[PropostaGeradaEvent publicado]
-    C -->|Falha| E[PropostaCreditoFalhouEvent publicado]
-    D --> F[Cartão de Crédito consome evento]
-    F -->|Sucesso| G[CartaoEmitidoEvent publicado]
-    F -->|Falha| H[CartaoEmissaoFalhouEvent publicado]
-    E --> I[Cadastro de Clientes processa fallback]
-    H --> I
-```
+<img src="./Docs/DiagramaParanaBanco.drawio.svg">
 
 ---
 
