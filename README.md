@@ -1,4 +1,4 @@
-#Paraná Banco Business Case
+# Paraná Banco Business Case
 ## 📘 Documentação Técnica
 
 ### 🧾 Visão Geral
