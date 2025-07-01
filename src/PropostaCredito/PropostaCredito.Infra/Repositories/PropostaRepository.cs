@@ -1,4 +1,5 @@
-﻿using PropostaCredito.Domain.Entidades;
+﻿using Microsoft.EntityFrameworkCore;
+using PropostaCredito.Domain.Entidades;
 using PropostaCredito.Domain.Interfaces;
 using PropostaCredito.Infra.DbContexts;
 
@@ -20,6 +21,18 @@ namespace PropostaCredito.Infra.Repositories
             return proposta;
         }
 
+        public Task<Proposta?> ObterPorClienteAsync(Guid clienteId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<decimal> SomarPropostasPorCliente(Guid clienteId)
+        {
+            return await _context.Propostas
+                .Where(p => p.ClienteId == clienteId && p.Aprovada)
+                .SumAsync(p => p.ValorSolicitado);
+        }
+
         public async Task<Proposta> ObterPorIdAsync(Guid id)
         {
             if (id == Guid.Empty)
@@ -31,5 +44,7 @@ namespace PropostaCredito.Infra.Repositories
 
             return proposta ?? throw new KeyNotFoundException($"Proposta com ID {id} não encontrada.");
         }
+
+        
     }
 }

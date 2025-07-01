@@ -24,6 +24,15 @@
             Avaliar();
         }
 
+        public Proposta(Guid clienteId, decimal valorSolicitado, decimal rendaMensal, bool aprovada, string motivoRejeicao)
+        {
+            ClienteId = clienteId;
+            ValorSolicitado = valorSolicitado;
+            RendaMensal = rendaMensal;
+
+            Rejeitar(motivoRejeicao);
+        }
+
         private void Avaliar()
         {
             // Lógica de avaliação da proposta
@@ -31,6 +40,13 @@
             if (ValorSolicitado > RendaMensal * 3)
             {
                 Rejeitar("Valor solicitado excede o limite permitido.");
+                return;
+            }
+
+            //Se o valor solicitado for = 0, rejeita
+            if (ValorSolicitado == 0)
+            {
+                Rejeitar("Cliente já atingiu o limite máximo de crédito permitido.");
                 return;
             }
 

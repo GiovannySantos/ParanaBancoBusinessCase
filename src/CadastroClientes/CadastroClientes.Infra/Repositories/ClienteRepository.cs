@@ -24,6 +24,6 @@ namespace CadastroClientes.Infra.Repositories
 
         public async Task<Cliente?> ObterPorCpf(string cpf) => await _context.Clientes.FirstOrDefaultAsync(c => c.Cpf == cpf);
 
-        public async Task<Cliente?> ObterPorId(Guid clienteId) => await _context.Clientes.FirstOrDefaultAsync(c => c.Id == clienteId);
+        public async Task<Cliente?> ObterPorId(Guid clienteId) => await _context.Clientes.FindAsync(clienteId);
     }
 }
