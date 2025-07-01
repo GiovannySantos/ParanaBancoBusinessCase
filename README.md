@@ -71,7 +71,7 @@ Cada contexto é modelado de forma isolada, com seus próprios contratos de even
 
 O diagrama abaixo representa a orquestração entre os microsserviços utilizando **RabbitMQ**, com eventos, consumidores, DLQs e mecanismos de resiliência.
 
-<img src="./docs/DiagramaParanaBanco.drawio.svg" alt="Fluxo de Microsserviços" width="100%" />
+<img src="./docs/DiagramaParanaBanco.svg" alt="Fluxo de Microsserviços" width="100%" />
 
 📄 [Clique aqui para baixar o PDF do diagrama](./docs/DiagramaParanaBanco.drawio.pdf)
 
