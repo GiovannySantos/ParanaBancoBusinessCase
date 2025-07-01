@@ -139,8 +139,11 @@ Content-Type: application/json
 
 ---
 
-### 📊 Fluxograma de Processo
-<img src="./Docs/DiagramaParanaBanco.drawio.svg">
+# 📊 Diagrama de Arquitetura
+
+O diagrama abaixo representa a comunicação entre os microsserviços de **Cadastro de Clientes**, **Proposta de Crédito** e **Cartão de Crédito**, utilizando **RabbitMQ**, **eventos assíncronos**, e estratégias de **resiliência com DLQ e retry**.
+
+<img src="./docs/DiagramaParanaBanco.drawio.svg" alt="Fluxo de Microsserviços" width="100%" />
 
 ---
 
