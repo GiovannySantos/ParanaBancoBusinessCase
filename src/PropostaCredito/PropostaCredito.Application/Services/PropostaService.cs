@@ -37,7 +37,7 @@ namespace PropostaCredito.Application.Services
             {
                 evento.ValorCreditoDesejado = 0;
                 var propostaRejeitada = CriarProposta(evento, valorSolicitado);
-                
+                await _propostaRepository.CadastrarAsync(propostaRejeitada);
                 await PublicarPropostaRejeitadaAsync(propostaRejeitada);
                 
                 return new(false, propostaRejeitada.MotivoRejeicao!, propostaRejeitada);
