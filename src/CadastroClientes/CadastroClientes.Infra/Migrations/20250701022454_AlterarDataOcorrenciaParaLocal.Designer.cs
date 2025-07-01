@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CadastroClientes.Infra.Migrations
 {
     [DbContext(typeof(CadastroClientesDbContext))]
-    [Migration("20250629231110_AddClienteCartao")]
-    partial class AddClienteCartao
+    [Migration("20250701022454_AlterarDataOcorrenciaParaLocal")]
+    partial class AlterarDataOcorrenciaParaLocal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,10 +37,10 @@ namespace CadastroClientes.Infra.Migrations
                         .HasColumnType("character varying(11)");
 
                     b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("DataNascimento")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -53,7 +53,7 @@ namespace CadastroClientes.Infra.Migrations
                         .HasColumnType("character varying(200)");
 
                     b.Property<decimal>("RendaMensal")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Telefone")
                         .IsRequired()
@@ -61,7 +61,7 @@ namespace CadastroClientes.Infra.Migrations
                         .HasColumnType("character varying(15)");
 
                     b.Property<decimal>("ValorCreditoDesejado")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -81,7 +81,7 @@ namespace CadastroClientes.Infra.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<decimal>("Limite")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("NomeImpresso")
                         .IsRequired()
@@ -96,8 +96,10 @@ namespace CadastroClientes.Infra.Migrations
                     b.Property<Guid>("PropostaId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("Validade")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("Validade")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .HasColumnType("character varying(7)");
 
                     b.HasKey("Id");
 
@@ -109,6 +111,38 @@ namespace CadastroClientes.Infra.Migrations
                     b.HasIndex("PropostaId");
 
                     b.ToTable("ClienteCartao", (string)null);
+                });
+
+            modelBuilder.Entity("CadastroClientes.Domain.Entidades.EventoErro", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DataOcorrencia")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Erro")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Origem")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RoutingKey")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EventoErro", (string)null);
                 });
 #pragma warning restore 612, 618
         }

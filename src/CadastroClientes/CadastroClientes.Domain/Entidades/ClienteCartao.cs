@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CadastroClientes.Domain.Entidades
+﻿namespace CadastroClientes.Domain.Entidades
 {
     public class ClienteCartao
     {
@@ -15,7 +9,7 @@ namespace CadastroClientes.Domain.Entidades
 
         public string NumeroCartao { get; private set; } = null!;
         public string NomeImpresso { get; private set; } = null!;
-        public DateTime Validade { get; private set; }
+        public string Validade { get; private set; }
         public decimal Limite { get; private set; }
 
         protected ClienteCartao() { } // EF Core
@@ -28,7 +22,7 @@ namespace CadastroClientes.Domain.Entidades
             CartaoId = cartaoId;
             NumeroCartao = numeroCartao;
             NomeImpresso = nomeImpresso;
-            Validade = validade;
+            Validade = validade.ToString("MM-yyyy");
             Limite = limite;
         }
     }

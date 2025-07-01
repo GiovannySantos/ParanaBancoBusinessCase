@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CadastroClientes.Infra.Migrations
 {
     [DbContext(typeof(CadastroClientesDbContext))]
-    [Migration("20250630053408_CreateEventoErroTable")]
-    partial class CreateEventoErroTable
+    [Migration("20250701015541_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,7 +53,7 @@ namespace CadastroClientes.Infra.Migrations
                         .HasColumnType("character varying(200)");
 
                     b.Property<decimal>("RendaMensal")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Telefone")
                         .IsRequired()
@@ -61,7 +61,7 @@ namespace CadastroClientes.Infra.Migrations
                         .HasColumnType("character varying(15)");
 
                     b.Property<decimal>("ValorCreditoDesejado")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -81,7 +81,7 @@ namespace CadastroClientes.Infra.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<decimal>("Limite")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("NomeImpresso")
                         .IsRequired()
@@ -96,8 +96,10 @@ namespace CadastroClientes.Infra.Migrations
                     b.Property<Guid>("PropostaId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("Validade")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("Validade")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .HasColumnType("character varying(7)");
 
                     b.HasKey("Id");
 

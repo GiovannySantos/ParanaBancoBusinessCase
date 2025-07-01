@@ -18,22 +18,39 @@ namespace CadastroClientes.Application.Services
         {
             var validacoes = ValidarClienteDto(clienteDto);
             if (validacoes != null && validacoes.Count > 0)
-                return new(false, validacoes);
+                return new(false, validacoes, clienteDto);
 
-            Cliente? cliente = await _clienteRepository.CadastrarAsync(new(
-                clienteDto.Nome,
-                clienteDto.Cpf,
-                clienteDto.DataNascimento,
-                clienteDto.Email,
-                clienteDto.Telefone,
-                clienteDto.RendaMensal,
-                clienteDto.ValorCreditoDesejado
-            ));
+            //validar se o cliente já existe (por cpf)
+            //Caso exista: reutiliza todos os campos e solicita uma nova proposta com o valor solicitado para o mesmo cliente
+            Cliente? cliente = await _clienteRepository.ObterPorCpf(clienteDto.Cpf);
+            if (cliente == null)
+            {
+                cliente = await _clienteRepository.CadastrarAsync(new(
+                    clienteDto.Nome,
+                    clienteDto.Cpf,
+                    clienteDto.DataNascimento,
+                    clienteDto.Email,
+                    clienteDto.Telefone,
+                    clienteDto.RendaMensal,
+                    clienteDto.ValorCreditoDesejado
+                ));
+                await PublishClienteCadastrado(cliente);
+                return new(sucesso: true, "Cliente cadastrado com sucesso!", clienteDto);
+            }
 
-            // Publica o evento de cliente cadastrado
+            cliente.ValorCreditoDesejado = clienteDto.ValorCreditoDesejado;
+
+            //Se a renda mensal mudou atribui o novo valor
+            if (cliente.RendaMensal != clienteDto.RendaMensal)
+            {
+                cliente.RendaMensal = clienteDto.RendaMensal;
+                await _clienteRepository.AtualizarAsync(cliente);
+            }
+
             await PublishClienteCadastrado(cliente);
 
-            return new(sucesso: true, new { cliente.Nome, cliente.Email });
+
+            return new(sucesso: true, $"Cliente já possui cadastro, foi enviado uma análise da proposta no valor de {clienteDto.ValorCreditoDesejado}", clienteDto);
         }
 
         private async Task PublishClienteCadastrado(Cliente cliente)
@@ -53,25 +70,29 @@ namespace CadastroClientes.Application.Services
 
         public async Task<ClientesResult> ObterAsync(string cpf)
         {
-
             var cliente = await _clienteRepository.ObterPorCpf(cpf);
             if (cliente is null)
-                return new(false, "Cliente não encontrado.");
+                return new(false, "Cliente não encontrado para o cpf informado", new());
 
-            return new(true, new { cliente });
+            return new(true, "Cliente obtido com sucesso!", new
+            {
+                cliente.Nome,
+                DataNascimento = cliente.DataNascimento.ToString("dd/MM/yyyy"),
+                cliente.Cpf,
+                cliente.Email,
+                cliente.Telefone
+            });
         }
 
         public async Task VincularCartaoClienteAsync(CartaoCreditoCriadoEvent evento)
         {
-            Cliente? cliente = await _clienteRepository.ObterPorId(evento.ClienteId);
-            if (cliente is null)
-                throw new Exception("Cliente não encontrado para vincular o cartão de crédito.");
+            _ = await _clienteRepository.ObterPorId(evento.ClienteId)
+                ?? throw new Exception("Cliente não encontrado para vincular o cartão de crédito.");
 
             // Verifica se o cartão já está vinculado ao cliente
-            var cartaoExistente = await _clienteCartaoRepository.ObterPorCartaoId(evento.CartaoId);
+            ClienteCartao? cartaoExistente = await _clienteCartaoRepository.ObterPorCartaoId(evento.CartaoId);
             if (cartaoExistente != null)
                 return;
-
 
             await _clienteCartaoRepository.AdicionarAsync(new ClienteCartao(
                 evento.ClienteId,
@@ -99,6 +120,9 @@ namespace CadastroClientes.Application.Services
             if (clienteDto.DataNascimento == default || clienteDto.DataNascimento > DateTime.Today)
                 erros.Add("Data de nascimento inválida.");
 
+            if (!PossuiIdadeMinima(clienteDto.DataNascimento))
+                erros.Add("Cliente deve ter pelo menos 18 anos.");
+
             if (string.IsNullOrWhiteSpace(clienteDto.Email) || !ValidarEmail(clienteDto.Email))
                 erros.Add("Email é inválido ou está vazio.");
 
@@ -112,6 +136,14 @@ namespace CadastroClientes.Application.Services
                 erros.Add("Valor do crédito desejado deve ser maior que zero.");
 
             return erros.Count > 0 ? erros : null;
+        }
+
+        private static bool PossuiIdadeMinima(DateTime dataNascimento)
+        {
+            int idade = DateTime.Today.Year - dataNascimento.Year;
+            if (dataNascimento > DateTime.Today.AddYears(-idade))
+                idade--;
+            return idade >= 18;
         }
 
         private static bool ValidarCpf(string cpf)

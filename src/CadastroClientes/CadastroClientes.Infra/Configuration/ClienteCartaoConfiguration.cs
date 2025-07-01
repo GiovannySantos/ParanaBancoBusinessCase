@@ -18,6 +18,14 @@ namespace CadastroClientes.Infra.Configuration
 
             builder.Property(x => x.NumeroCartao).HasMaxLength(20).IsRequired();
             builder.Property(x => x.NomeImpresso).HasMaxLength(100).IsRequired();
+
+            builder.Property(x => x.Validade)
+                .HasMaxLength(7) // Ex: "07-2027"
+                .IsRequired();
+
+            builder.Property(x => x.Limite)
+                .HasColumnType("decimal(18,2)") // ou ajuste conforme sua precisão
+                .IsRequired();
         }
     }
 }
